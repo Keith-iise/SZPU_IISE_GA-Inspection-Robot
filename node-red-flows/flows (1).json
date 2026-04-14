@@ -1,0 +1,58 @@
+[
+    {
+        "id": "bffaf7cda83951da",
+        "type": "ui_gauge",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "group": "5c8a187313ca7b32",
+        "order": 7,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "当前仪表",
+        "label": "Lux",
+        "format": "{{value|number}}",
+        "min": 0,
+        "max": "6",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 840,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "5c8a187313ca7b32",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "75c290b23124eb51",
+        "order": 1,
+        "disp": false,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "75c290b23124eb51",
+        "type": "ui_tab",
+        "name": "巡检页",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "e2af7ff3f7d59694",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]

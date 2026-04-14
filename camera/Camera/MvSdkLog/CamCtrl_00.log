@@ -1,0 +1,4 @@
+Error   2025-07-08 19:54:19:698  DevID:  Source-Line:libMvCameraControl.so(OtherLoadLibrary.cpp-L0141)  ProcessName:python3.10(12895)     Description:[LoadMPAllFunctions]hMPModule is NULL, strMPDllName[lib/libMediaProcess.so], Ret[libFormatConversion.so: cannot open shared object file: No such file or directory]
+Error   2025-07-08 19:54:19:698  DevID:  Source-Line:libMvCameraControl.so(OtherLoadLibrary.cpp-L0147)  ProcessName:python3.10(12895)     Description:[LoadMPAllFunctions]hMPModule is NULL, strMPDllName[lib/libMediaProcess.so], Ret[0x8000000c]
+Error   2025-07-08 19:54:19:698  DevID:  Source-Line:libMvCameraControl.so(OtherLoadLibrary.cpp-L0734)  ProcessName:python3.10(12895)     Description:[LoadSRAllFunctions]hSRModule is NULL, Ret[0x8000000c]
+Error   2025-07-08 19:54:19:701  DevID:  Source-Line:libMvCameraControl.so(U3VDeviceEnumerator.cpp-L0057)  ProcessName:python3.10(12895)     Description:[DoEnumDevices]MV_U3V_EnumDevice failed! Ret[0x80000008]

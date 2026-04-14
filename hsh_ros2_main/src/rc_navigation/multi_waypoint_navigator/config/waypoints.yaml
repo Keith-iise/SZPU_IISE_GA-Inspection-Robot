@@ -1,0 +1,13 @@
+waypoints:
+- x: -0.3
+  y: -2.9
+  yaw: 0.02
+  name: point1
+- x: 6.3
+  y: -1.42
+  yaw: -1.58
+  name: point2
+- x: 8.95
+  y: 0.28
+  yaw: 1.49
+  name: point3

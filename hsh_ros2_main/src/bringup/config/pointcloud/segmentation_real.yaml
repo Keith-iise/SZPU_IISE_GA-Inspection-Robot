@@ -1,0 +1,94 @@
+# ground_segmentation:
+#   ros__parameters:
+#     n_threads: 4                # number of threads to use.
+
+#     r_min: 0.2                  # minimum point distance.
+#     r_max: 50.0                   # maximum point distance.
+#     n_bins: 120                 # number of radial bins.
+#     n_segments: 360             # number of radial segments.
+
+#     max_dist_to_line: 0.1       # maximum vertical distance of point to line to be considered ground.
+
+#     sensor_height: 0.59         # REAL sensor height above ground.
+#     min_slope: -0.4             # minimum slope of a ground line.
+#     max_slope: 0.4              # maximum slope of a ground line.
+#     max_fit_error: 0.05         # maximum error of a point during line fit.
+#     long_threshold: 1.0         # distance between points after which they are considered far from each other.
+#     max_long_height: 0.1        # maximum height change to previous point in long line.
+#     max_start_height: 0.5       # maximum difference to estimated ground height to start a new line.
+#     line_search_angle: 0.8      # how far to search in angular direction to find a line [rad].
+
+#     gravity_aligned_frame: ""   # Frame which has its z axis aligned with gravity. (Sensor frame if empty.)
+
+#     latch: false                # latch output topics or not
+#     visualize: false            # visualize segmentation result - USE ONLY FOR DEBUGGING
+
+#     input_topic: "/livox/lidar"
+#     obstacle_output_topic: "segmentation/obstacle"
+#     ground_output_topic: "segmentation/ground"
+
+# ground_segmentation:
+#   ros__parameters:
+#     n_threads: 8                # number of threads to use.
+
+#     r_min: 1.0                  # minimum point distance.
+#     r_max: 50.0                   # maximum point distance.
+#     n_bins: 360                 # number of radial bins.
+#     n_segments: 360             # number of radial segments.
+
+#     max_dist_to_line: 0.04      # maximum vertical distance of point to line to be considered ground.
+
+#     sensor_height: 0.24         # sensor height above ground.
+#     min_slope: 0.0              # minimum slope of a ground line.
+#     max_slope: 0.3              # maximum slope of a ground line.
+#     max_fit_error: 0.02         # maximum error of a point during line fit.
+#     long_threshold: 1.0         # distance between points after which they are considered far from each other.
+#     max_long_height: 0.01        # maximum height change to previous point in long line.
+#     max_start_height: 0.2       # maximum difference to estimated ground height to start a new line.
+#     line_search_angle: 0.1      # how far to search in angular direction to find a line [rad].
+
+#     gravity_aligned_frame: ""   # Frame which has its z axis aligned with gravity. (Sensor frame if empty.)
+
+#     visualize: false            # visualize segmentation result - USE ONLY FOR DEBUGGING
+#     min_height_: -100.0
+#     max_height_: 100.0
+
+#     input_topic: "livox/lidar"
+#     obstacle_output_topic: "segmentation/obstacle"
+#     ground_output_topic: "segmentation/ground"
+
+
+
+
+
+ground_segmentation:
+  ros__parameters:
+    n_threads: 8                # 根据 CPU 核心数调整，嵌入式平台建议 2~4
+
+    r_min: 0.5                  # 减小近端盲区，MID-360 近距离可用
+    r_max: 30.0                 # 一般场景 30m 足够，减少计算量
+
+    n_bins: 80                  # 匹配 MID-360 水平视场角 ~81.7°
+    n_segments: 80              # 每个 segment ~1° 分辨率
+
+    max_dist_to_line: 0.15      # 严格判断：距拟合线 <3cm 视为地面（低安装需高精度）
+    sensor_height: 0.2          # 必须准确设置！影响地面模型初始估计
+    min_slope: 0.0              # 允许水平地面
+    max_slope: 0.4              # 允许 ~22° 坡度（如缓坡、地毯边缘）
+    max_fit_error: 0.02         # 拟合误差控制较严，避免噪声干扰
+
+    long_threshold: 1.5         # 点距 >0.8m 视为“远距离”
+    max_long_height: 0.05       # 远距离点高度变化不超过 1cm（防止跨过台阶）
+    max_start_height: 0.15      # 新线起始点与估计地面差不超过 15cm
+    line_search_angle: 1.5     # 增大搜索角度至 ~8.6°，适应非全向扫描的空缺扇区
+
+    gravity_aligned_frame: ""   # 若无 IMU 对齐坐标系，留空
+
+    visualize: false            # 生产环境关闭可视化
+
+    min_height_: -100.0           # 过滤明显低于地面的点（如小坑、噪声）
+    max_height_: 100.0            # 过滤过高点（如天花板、树枝），提升效率
+
+    input_topic: "livox/lidar"                     # 确保与驱动发布一致
+    obstacle_output_topic: "segmentation/obstacle"
+    ground_output_topic: "segmentation/ground"

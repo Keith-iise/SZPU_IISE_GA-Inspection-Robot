@@ -1,0 +1,5 @@
+serial_twist_publisher:
+  ros__parameters:
+    baudrate : 115200
+    linear_scale : 100.0 
+    angular_scale: 100.0 

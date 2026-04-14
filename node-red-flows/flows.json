@@ -1,0 +1,823 @@
+[
+    {
+        "id": "9e5efdeed23e5991",
+        "type": "tab",
+        "label": "流程 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1f66131c5959eae0",
+        "type": "mqtt in",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "topic": "camera/data",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "a9e1892d8f510a67",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 696.1666870117188,
+        "y": 919.6666564941406,
+        "wires": [
+            [
+                "8c9982638190972d",
+                "fcae262e14f8177e"
+            ]
+        ]
+    },
+    {
+        "id": "8c9982638190972d",
+        "type": "ui_template",
+        "z": "9e5efdeed23e5991",
+        "d": true,
+        "group": "0a82b5c42dc65564",
+        "name": "",
+        "order": 6,
+        "width": 6,
+        "height": 6,
+        "format": "<div style=\"text-align: center;\">\n  <img ng-src=\"data:image/jpeg;base64,{{msg.payload}}\" \n       style=\"max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px;\"\n       alt=\"Camera Stream\">\n  <p style=\"font-size: 12px; color: #666;\">相机回传: {{ $flow.lastupdate }}</p>\n</div>\n\n<script>\n// 更新时间戳\n(function(scope) {\n    scope.$watch('msg', function(msg) {\n        if (msg) {\n            scope.$flow.lastupdate = new Date().toLocaleTimeString();\n        }\n    });\n})(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 906.1666870117188,
+        "y": 919.6666564941406,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fc50fd027b7931ea",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "function 1",
+        "func": "var wen = global.get(\"wen\")\nif (msg.payload > wen)\n{\n    msg.payload=\"温度过高，请注意\"\nreturn msg;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 340,
+        "wires": [
+            [
+                "5afa9f0b40365ecd"
+            ]
+        ]
+    },
+    {
+        "id": "615604435c611aa5",
+        "type": "ui_gauge",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "group": "5c8a187313ca7b32",
+        "order": 1,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "环境温度",
+        "label": "摄氏度",
+        "format": "{{value|number:2}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "c664ede9432c4e34",
+        "type": "ui_gauge",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "group": "5c8a187313ca7b32",
+        "order": 6,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "环境湿度",
+        "label": "%RH",
+        "format": "{{value|number:2}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "90c4562619511a97",
+        "type": "ui_text_input",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "label": "温度阈值",
+        "tooltip": "",
+        "group": "5c8a187313ca7b32",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "passthru": true,
+        "mode": "number",
+        "delay": 300,
+        "topic": "topic",
+        "sendOnBlur": true,
+        "className": "",
+        "topicType": "msg",
+        "x": 960,
+        "y": 780,
+        "wires": [
+            [
+                "6170e69f5ace9064"
+            ]
+        ]
+    },
+    {
+        "id": "6170e69f5ace9064",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "function 2",
+        "func": "global.set(\"wen\",msg.payload)\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2aef6f1199b87aae",
+        "type": "inject",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 640,
+        "y": 780,
+        "wires": [
+            [
+                "32be13e473f7789e"
+            ]
+        ]
+    },
+    {
+        "id": "32be13e473f7789e",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "function 3",
+        "func": "var wen = global.get(\"wen\")\nif (!wen)\n{\n    msg.payload = 70\n\nreturn msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 780,
+        "wires": [
+            [
+                "90c4562619511a97"
+            ]
+        ]
+    },
+    {
+        "id": "f32571dd592e3dd0",
+        "type": "ui_text_input",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "label": "湿度阈值",
+        "tooltip": "",
+        "group": "5c8a187313ca7b32",
+        "order": 4,
+        "width": 3,
+        "height": 1,
+        "passthru": true,
+        "mode": "number",
+        "delay": 300,
+        "topic": "topic",
+        "sendOnBlur": true,
+        "className": "",
+        "topicType": "msg",
+        "x": 960,
+        "y": 820,
+        "wires": [
+            [
+                "c7cc4fb2892ca883"
+            ]
+        ]
+    },
+    {
+        "id": "c7cc4fb2892ca883",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "function 4",
+        "func": "global.set(\"shi\",msg.payload)\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8b5a529266a8cc76",
+        "type": "inject",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 640,
+        "y": 820,
+        "wires": [
+            [
+                "bc2a617356fb34cd"
+            ]
+        ]
+    },
+    {
+        "id": "bc2a617356fb34cd",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "function 5",
+        "func": "var shi = global.get(\"shi\")\nif (!shi)\n{\n    msg.payload = 70\n\nreturn msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 820,
+        "wires": [
+            [
+                "f32571dd592e3dd0"
+            ]
+        ]
+    },
+    {
+        "id": "5afa9f0b40365ecd",
+        "type": "ui_toast",
+        "z": "9e5efdeed23e5991",
+        "position": "top right",
+        "displayTime": "5",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 1120,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "7ec6f01f09fc3473",
+        "type": "ui_template",
+        "z": "9e5efdeed23e5991",
+        "group": "5c8a187313ca7b32",
+        "name": "Image and Text Display",
+        "order": 2,
+        "width": 6,
+        "height": 9,
+        "format": "<div style=\"text-align: center; font-family: Arial, sans-serif;\">\n\n  <!-- 时间戳 -->\n  <p style=\"font-size: 12px; color: #666;\">\n    相机回传: {{ $flow.lastupdate }}\n  </p>\n  <!-- 显示字符串 -->\n  <p style=\"font-size: 18px; color: #333; margin: 10px 0;\">\n    {{msg.payload.message}}\n  </p>\n  <!-- 图像显示 -->\n  <img ng-src=\"data:image/jpeg;base64,{{msg.payload.image}}\" \n       style=\"max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px;\"\n       alt=\"Camera Stream\">\n\n\n\n</div>\n\n<script>\n// 更新时间戳\n(function(scope) {\n    scope.$watch('msg', function(msg) {\n        if (msg && msg.payload) {\n            // 更新时间\n            scope.$flow.lastupdate = new Date().toLocaleTimeString();\n        }\n    });\n})(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "className": "",
+        "x": 910,
+        "y": 1120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fcae262e14f8177e",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "Extract Image & Message",
+        "func": "// 解析 JSON 消息\nconst payload = msg.payload;\n\n// 设置图像数据\nif (payload.image) {\n    msg.imageData = payload.image;\n}\n\n// 设置消息文本\nif (payload.message) {\n    msg.messageText = payload.message;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 1040,
+        "wires": [
+            [
+                "7ec6f01f09fc3473"
+            ]
+        ]
+    },
+    {
+        "id": "4b669a3dbf901ec1",
+        "type": "inject",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 500,
+        "y": 140,
+        "wires": [
+            [
+                "acaf4503f6ff4fc6",
+                "034fc3c68ead81ae",
+                "343bf41a934e07f3"
+            ]
+        ]
+    },
+    {
+        "id": "acaf4503f6ff4fc6",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "温湿度请求",
+        "func": "var temp = new Buffer([0x01, 0x03, 0x00, 0x00, 0x00, 0x02, 0xc4, 0x0b]);\nmsg.payload = temp;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 100,
+        "wires": [
+            [
+                "42ae67e4e16e9746"
+            ]
+        ]
+    },
+    {
+        "id": "efa8c8377e660f3e",
+        "type": "serial out",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "serial": "42fae8ae22e54cde",
+        "x": 1120,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "3bdd9cacf12fa27b",
+        "type": "serial in",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "serial": "42fae8ae22e54cde",
+        "x": 420,
+        "y": 500,
+        "wires": [
+            [
+                "9ee8b1bc75fb6e08",
+                "2c09932ea496e8c0",
+                "c12a8e59ee91311c"
+            ]
+        ]
+    },
+    {
+        "id": "034fc3c68ead81ae",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "光照请求",
+        "func": "var temp = new Buffer([0x02, 0x03, 0x00, 0x07, 0x00, 0x02, 0x75, 0xf9]);\nmsg.payload = temp;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 140,
+        "wires": [
+            [
+                "42ae67e4e16e9746"
+            ]
+        ]
+    },
+    {
+        "id": "343bf41a934e07f3",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "烟雾请求",
+        "func": "var temp = new Buffer([0x03, 0x03, 0x00, 0x10, 0x00, 0x01, 0x84, 0x2d]);\nmsg.payload = temp;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 180,
+        "wires": [
+            [
+                "42ae67e4e16e9746"
+            ]
+        ]
+    },
+    {
+        "id": "9ee8b1bc75fb6e08",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "获取湿度",
+        "func": "if (msg.payload[0] == 0x01)\n{\n    var wen = msg.payload[3]*256+msg.payload[4]\n    var shi = msg.payload[5]*256+msg.payload[6]\n    \n    var msgTemp = { payload: wen / 10 };\n    var msgHumidity = { payload: shi /10 };\n\n    return [msgTemp, msgHumidity];\n}\n\n    // return msg;\n\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 300,
+        "wires": [
+            [
+                "615604435c611aa5"
+            ],
+            [
+                "c664ede9432c4e34"
+            ]
+        ]
+    },
+    {
+        "id": "2c09932ea496e8c0",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "获取光照",
+        "func": "if (msg.payload[0] == 0x02)\n{\n    var lux = msg.payload[5]*256+msg.payload[6]\n    \n    \n    var msgTemp = { payload: lux };\n    \n\n    return msgTemp;\n}\n\n    // return msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 420,
+        "wires": [
+            [
+                "54853dd5c49388b2"
+            ]
+        ]
+    },
+    {
+        "id": "c12a8e59ee91311c",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "获取烟雾",
+        "func": "if (msg.payload[0] == 0x03) {\n    var yan = msg.payload[4]\n\n\n    var msgTemp = { payload: yan };\n\n\n    return msgTemp;\n}\n\n// return msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 660,
+        "wires": [
+            [
+                "645e0a2f9fa49e60"
+            ]
+        ]
+    },
+    {
+        "id": "645e0a2f9fa49e60",
+        "type": "function",
+        "z": "9e5efdeed23e5991",
+        "name": "function 6",
+        "func": "\nif (msg.payload != 0)\n{\n    var msgMsage = { payload: \"现场发现烟雾，请注意\" };\n    var msgColor = { payload: 'red'  };\n    return [msgMsage,msgColor];\n}\nelse\n{\n\n\n    var msgColor = { payload: 'green'  };\n    return [null,msgColor];\n}\n\n\n\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 660,
+        "wires": [
+            [
+                "83e84ec5ef246936"
+            ],
+            [
+                "35e6eb752f111755"
+            ]
+        ]
+    },
+    {
+        "id": "83e84ec5ef246936",
+        "type": "ui_toast",
+        "z": "9e5efdeed23e5991",
+        "position": "top right",
+        "displayTime": "5",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 1110,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "42ae67e4e16e9746",
+        "type": "delay",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "0.1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 890,
+        "y": 100,
+        "wires": [
+            [
+                "efa8c8377e660f3e"
+            ]
+        ]
+    },
+    {
+        "id": "35e6eb752f111755",
+        "type": "ui_button",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "group": "5c8a187313ca7b32",
+        "order": 5,
+        "width": 3,
+        "height": 2,
+        "passthru": false,
+        "label": "烟雾指示灯",
+        "tooltip": "",
+        "color": "white",
+        "bgcolor": "{{msg.payload}}",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1090,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "54853dd5c49388b2",
+        "type": "ui_gauge",
+        "z": "9e5efdeed23e5991",
+        "name": "",
+        "group": "5c8a187313ca7b32",
+        "order": 9,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "环境光照",
+        "label": "Lux",
+        "format": "{{value|number}}",
+        "min": 0,
+        "max": "65535",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "d615d649f31af090",
+        "type": "ui_spacer",
+        "z": "9e5efdeed23e5991",
+        "name": "spacer",
+        "group": "5c8a187313ca7b32",
+        "order": 7,
+        "width": 3,
+        "height": 1
+    },
+    {
+        "id": "6a5a7cbc038519e5",
+        "type": "ui_spacer",
+        "z": "9e5efdeed23e5991",
+        "name": "spacer",
+        "group": "5c8a187313ca7b32",
+        "order": 8,
+        "width": 3,
+        "height": 1
+    },
+    {
+        "id": "eb31fd8910b560c7",
+        "type": "ui_spacer",
+        "z": "9e5efdeed23e5991",
+        "name": "spacer",
+        "group": "5c8a187313ca7b32",
+        "order": 10,
+        "width": 3,
+        "height": 1
+    },
+    {
+        "id": "32645f60259a2298",
+        "type": "ui_spacer",
+        "z": "9e5efdeed23e5991",
+        "name": "spacer",
+        "group": "5c8a187313ca7b32",
+        "order": 11,
+        "width": 3,
+        "height": 1
+    },
+    {
+        "id": "1bdad3adb9bfbb44",
+        "type": "ui_spacer",
+        "z": "9e5efdeed23e5991",
+        "name": "spacer",
+        "group": "5c8a187313ca7b32",
+        "order": 12,
+        "width": 3,
+        "height": 1
+    },
+    {
+        "id": "a9e1892d8f510a67",
+        "type": "mqtt-broker",
+        "name": "Camera Image",
+        "broker": "127.0.0.1",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "camera/data",
+        "birthQos": "0",
+        "birthRetain": "true",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "0a82b5c42dc65564",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "408dbbd681bbd630",
+        "order": 1,
+        "disp": true,
+        "width": 6
+    },
+    {
+        "id": "5c8a187313ca7b32",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "75c290b23124eb51",
+        "order": 1,
+        "disp": false,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "42fae8ae22e54cde",
+        "type": "serial-port",
+        "name": "485串口",
+        "serialport": "/dev/ttyUSB0",
+        "serialbaud": "9600",
+        "databits": 8,
+        "parity": "none",
+        "stopbits": 1,
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "20",
+        "bin": "bin",
+        "out": "interbyte",
+        "addchar": "",
+        "responsetimeout": 10000
+    },
+    {
+        "id": "408dbbd681bbd630",
+        "type": "ui_tab",
+        "name": "Tab 2",
+        "icon": "dashboard",
+        "order": 2
+    },
+    {
+        "id": "75c290b23124eb51",
+        "type": "ui_tab",
+        "name": "巡检页",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "317607a5548da997",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6",
+            "node-red-node-serialport": "2.0.3"
+        }
+    }
+]

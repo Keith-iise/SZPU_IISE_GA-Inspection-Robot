@@ -1,0 +1,16 @@
+<!-- navigate_w_replanning_and_recovery.xml -->
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="root_sequence">
+      <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
+      <LoadPath controller_id="FollowPath" path="{path}"/>
+      <Repeat name="repeat_with_recovery" num_cycles="-1">
+        <Sequence name="control_cycle">
+          <GoalUpdated goal="{goal}" updated_goal="{updated_goal}"/>
+          <PipelineRecovery path="{path}" behavior_id="backup_wait_recover"/>
+          <TrackPath path="{path}" goal_checker_id="general_goal_checker"/>
+        </Sequence>
+      </Repeat>
+    </Sequence>
+  </BehaviorTree>
+</root>

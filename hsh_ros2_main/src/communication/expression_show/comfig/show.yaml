@@ -1,0 +1,4 @@
+show_node:
+  ros__parameters:
+    expression_list: ['开心', '严肃', '警觉', '失落', '正常', '生气', '心动']
+    pattern: '.jpg'
